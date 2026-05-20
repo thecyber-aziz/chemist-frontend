@@ -154,6 +154,30 @@ const BillingPage = () => {
     }
   };
 
+  const handleDeleteOrder = async (order) => {
+    if (window.confirm(`Are you sure you want to delete order ${order.orderId}?`)) {
+      try {
+        // Try to delete from backend if it has an _id
+        if (order._id) {
+          await orderAPI.deleteOrder(order._id);
+        }
+        
+        // Remove from local state
+        setOrders(orders.filter(o => o.orderId !== order.orderId));
+        
+        // Close the active order modal if it's the deleted one
+        if (activeOrder?.orderId === order.orderId) {
+          setActiveOrder(null);
+        }
+        
+        toast.success('Order deleted successfully');
+      } catch (error) {
+        console.error('Failed to delete order:', error);
+        toast.error(error.response?.data?.error || 'Failed to delete order');
+      }
+    }
+  };
+
   const escapeHtml = (value) =>
     String(value || '')
       .replace(/&/g, '&amp;')
@@ -752,7 +776,7 @@ const BillingPage = () => {
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {filteredOrders.map((order, index) => (
                     <tr
-                      key={order.id}
+                      key={order.orderId}
                       className="cursor-pointer hover:bg-slate-100"
                       onClick={() => setActiveOrder(order)}
                     >
@@ -795,6 +819,18 @@ const BillingPage = () => {
                             className="inline-flex items-center justify-center rounded-2xl border border-blue-100 bg-blue-50 p-2 text-blue-700 transition hover:bg-blue-100"
                           >
                             <Printer className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteOrder(order);
+                            }}
+                            aria-label="Delete order"
+                            title="Delete order"
+                            className="inline-flex items-center justify-center rounded-2xl border border-red-100 bg-red-50 p-2 text-red-600 transition hover:bg-red-100"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
                           </button>
                         </div>
                       </td>

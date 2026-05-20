@@ -1,8 +1,9 @@
 import API from './api';
 
 export const authAPI = {
-  login: (email) => API.post('/auth/login', { email }),
-  signup: (email) => API.post('/auth/signup', { email }),
+  login: (email, password) => API.post('/auth/login', { email, password }),
+  signup: (data) => API.post('/auth/signup', data),
+  googleAuth: (idToken) => API.post('/auth/google', { idToken }),
 };
 
 export const medicineAPI = {
