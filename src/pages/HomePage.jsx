@@ -87,21 +87,33 @@ const HomePage = () => {
   }).length;
   const outOfStockCount = medicines.filter((medicine) => Number(medicine.stock) === 0).length;
 
-  const StatCard = ({ Icon, title, value, iconClass, valueClass }) => (
-    <div className="glass-panel rounded-2xl p-6 flex flex-col justify-center text-center relative overflow-hidden group hover:-translate-y-2 transition-all duration-500">
-      <div className="flex items-center justify-center gap-2 mb-3">
-        <h2 className="text-sm font-extrabold tracking-widest text-slate-500 uppercase">{title}</h2>
-        <Icon className={`h-5 w-5 transform group-hover:scale-125 transition-transform duration-500 ${iconClass}`} strokeWidth={1.8} />
+  const StatCard = ({ Icon, title, value, iconClass, valueClass }) => {
+    const bgGradient = iconClass.includes('blue') ? 'from-blue-50 to-blue-100' : 
+                       iconClass.includes('red') ? 'from-red-50 to-red-100' : 
+                       iconClass.includes('orange') ? 'from-orange-50 to-orange-100' : 
+                       iconClass.includes('rose') ? 'from-rose-50 to-rose-100' : 
+                       'from-slate-50 to-slate-100';
+    
+    return (
+      <div className={`glass-panel rounded-2xl p-6 flex flex-col justify-center text-center relative overflow-hidden group hover:-translate-y-2 transition-all duration-500 bg-gradient-to-br ${bgGradient} border border-slate-200 shadow-sm hover:shadow-md`}>
+        <div className="absolute -right-8 -top-8 w-20 h-20 rounded-full opacity-10 group-hover:opacity-20 transition-opacity" style={{backgroundColor: '#3b82f6'}}></div>
+        <div className="flex items-center justify-center gap-2 mb-3 relative z-10">
+          <Icon className={`h-6 w-6 transform group-hover:scale-110 transition-transform duration-500 ${iconClass}`} strokeWidth={1.8} />
+          <h2 className="text-xs font-bold tracking-widest text-slate-600 uppercase">{title}</h2>
+        </div>
+        <p className={`text-4xl md:text-5xl font-black drop-shadow-sm transition-all duration-300 ${valueClass}`}>{value}</p>
       </div>
-      <p className={`text-5xl font-black drop-shadow-sm transition-all duration-300 ${valueClass}`}>{value}</p>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="w-full">
       <div className="max-w-7xl mx-auto space-y-8">
-        <div className="pt-2 pb-1 relative">
-          <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">Dashboard</h1>
+        <div className="pt-4 pb-2 relative">
+          <div className="flex items-center gap-3 mb-1">
+            <div className="h-8 w-2 bg-gradient-to-b from-blue-400 to-sky-500 rounded-full"></div>
+            <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">Dashboard</h1>
+          </div>
           <button
             type="button"
             onClick={() => setShowCategories((prev) => !prev)}
@@ -121,39 +133,47 @@ const HomePage = () => {
             <StatCard Icon={Ban} title="Out of Stock" value={outOfStockCount} iconClass="text-slate-500" valueClass="text-slate-500" />
         </div>
 
+        {/* Search Section */}
+        <div className="px-6">
+          <div className="relative w-full">
+            <label className="sr-only" htmlFor="home-page-search">
+              Search medicines
+            </label>
+            <Search className="absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+            <input
+              id="home-page-search"
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by medicine name, category..."
+              className="glass-input w-full pl-14 pr-5 py-4 text-slate-800 font-semibold placeholder:text-slate-400 placeholder:font-medium border border-slate-200 rounded-2xl outline-none hover:border-slate-300 focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition duration-300"
+            />
+          </div>
+        </div>
+
+        <div className="px-6">
+          <h2 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight mb-4">Shop by Category</h2>
+        </div>
+
         <div className="flex flex-wrap gap-2 px-6 pb-4">
           {categories.map((category) => (
             <button
               key={category}
               type="button"
               onClick={() => setSelectedCategory(category)}
-              className={`rounded-full border px-3 py-1 text-sm font-semibold transition ${selectedCategory === category ? 'border-black bg-black text-white' : 'border-slate-200 bg-white text-slate-700 hover:border-slate-900 hover:text-black'}`}
+              className={`rounded-full border px-4 py-2 text-sm font-bold transition duration-300 ${selectedCategory === category ? 'border-slate-900 bg-slate-900 text-white shadow-lg' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-400 hover:text-slate-900 hover:shadow-md'}`}
             >
               {category}
             </button>
           ))}
         </div>
 
-        {/* Table Section */}
-        <div className="glass-panel overflow-hidden">
-          <div className="p-6 border-b border-blue-100 bg-gradient-to-r from-blue-50 via-white to-sky-50 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        {/* Table Section - Desktop */}
+        <div className="hidden md:block glass-panel overflow-hidden">
+          <div className="p-6 border-b border-blue-100 bg-gradient-to-r from-blue-50 via-white to-sky-50">
             <div className="flex items-center gap-3">
               <div className="h-8 w-2 bg-gradient-to-b from-blue-400 to-sky-500 rounded-full"></div>
               <h3 className="text-2xl font-black text-slate-800 tracking-tight">Medicine List</h3>
-            </div>
-            <div className="relative w-full max-w-sm">
-              <label className="sr-only" htmlFor="home-page-search">
-                Search medicines
-              </label>
-              <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-              <input
-                id="home-page-search"
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search by name, category"
-                className="glass-input w-full px-11 py-3 text-slate-800 font-semibold placeholder:text-slate-400 placeholder:font-medium border border-black rounded-2xl outline-none hover:outline-none focus:outline-none focus:border-black "
-              />
             </div>
           </div>
 
@@ -243,6 +263,90 @@ const HomePage = () => {
               </tbody>
             </table>
           </div>
+        </div>
+
+        {/* Card View - Mobile */}
+        <div className="md:hidden space-y-4">
+          <div className="p-4 border-b border-blue-100 bg-gradient-to-r from-blue-50 via-white to-sky-50 flex items-center gap-3 rounded-t-2xl">
+            <div className="h-6 w-2 bg-gradient-to-b from-blue-400 to-sky-500 rounded-full"></div>
+            <h3 className="text-xl font-black text-slate-800 tracking-tight">Medicine List</h3>
+          </div>
+          {filteredProducts.length === 0 ? (
+            <div className="px-4 py-16 text-center">
+              <div className="flex flex-col items-center justify-center">
+                <SearchX className="h-10 w-10 mb-4 text-slate-300" strokeWidth={1.8} />
+                <p className="text-lg font-bold text-slate-400">No medicines found matching your criteria</p>
+              </div>
+            </div>
+          ) : (
+            <div className="px-4 pb-4 grid grid-cols-1 gap-4">
+              {filteredProducts.map((product) => {
+                const isAdded = cartProducts.some((item) => item.id === product.id);
+
+                return (
+                  <div
+                    key={product.id}
+                    className="glass-panel rounded-2xl p-4 border border-slate-200 hover:border-slate-300 transition-all duration-300 hover:shadow-lg"
+                  >
+                    {/* Medicine Image */}
+                    <div className="relative h-32 w-full overflow-hidden rounded-xl mb-4 border border-slate-200 bg-gradient-to-br from-slate-100 to-slate-50">
+                      {product.imageUrl ? (
+                        <img
+                          src={product.imageUrl}
+                          alt={product.medicineName}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-slate-300">
+                          <Pill className="h-8 w-8" strokeWidth={1.8} />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Medicine Name and Batch */}
+                    <div className="mb-3">
+                      <h4 className="text-lg font-black text-slate-800">{product.medicineName}</h4>
+                      <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mt-1">
+                        Batch: {product.batchName || 'N/A'}
+                      </p>
+                    </div>
+
+                    {/* Details Grid */}
+                    <div className="space-y-2 mb-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold tracking-widest text-slate-500 uppercase">Price</span>
+                        <span className="text-xl font-black text-slate-800">₹{product.sellingPrice}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold tracking-widest text-slate-500 uppercase">Category</span>
+                        <span className="text-sm font-semibold text-slate-600">{product.category}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold tracking-widest text-slate-500 uppercase">Expiry Date</span>
+                        <span className="text-sm font-semibold text-slate-600">
+                          {formatDateWithShortMonth(product.expireDate)}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Add to Cart Button */}
+                    <button
+                      type="button"
+                      disabled={isAdded}
+                      style={isAdded ? { backgroundColor: '#d1d5db', borderColor: '#d1d5db' } : undefined}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addToCart(product.id);
+                      }}
+                      className="w-full glass-button px-4 py-3 font-bold tracking-wide transition-all rounded-xl"
+                    >
+                      {isAdded ? 'Added' : 'Add to Cart'}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
         
       </div>

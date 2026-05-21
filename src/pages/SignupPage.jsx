@@ -51,12 +51,21 @@ const SignupPage = () => {
     try {
       setSubmitting(true);
       await googleSignIn();
+      // For mobile, this will redirect, so we don't need to navigate
+      // For desktop, after redirect result is handled in AuthContext, user will be set
       toast.success('Signed up with Google successfully');
-      navigate('/home', { replace: true });
+      // Use a small delay to allow mobile redirect to happen
+      setTimeout(() => {
+        navigate('/home', { replace: true });
+      }, 500);
     } catch (error) {
-      toast.error(error.message || 'Google sign-up failed');
-    } finally {
       setSubmitting(false);
+      if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+        // User cancelled the popup, just reset state
+        toast.info('Sign-up cancelled');
+      } else {
+        toast.error(error.message || 'Google sign-up failed');
+      }
     }
   };
 

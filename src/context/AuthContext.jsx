@@ -1,10 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth';
+import { signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider, signOut } from 'firebase/auth';
 import { auth } from '../config/firebaseConfig';
 import { authAPI } from '../services/apiCalls';
 
 const AuthContext = createContext();
 const googleProvider = new GoogleAuthProvider();
+
+// Set Firebase persistence across tabs
+googleProvider.setCustomParameters({
+  prompt: 'select_account'
+});
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -18,6 +23,27 @@ export const AuthProvider = ({ children }) => {
     if (token && userData) {
       setUser(JSON.parse(userData));
     }
+    
+    // Handle redirect result from Google sign-in
+    const handleRedirectResult = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          const idToken = await result.user.getIdToken();
+          const response = await authAPI.googleAuth(idToken);
+          const { token, user: userData } = response.data;
+
+          localStorage.setItem('token', token);
+          localStorage.setItem('user', JSON.stringify(userData));
+          setUser(userData);
+        }
+      } catch (err) {
+        console.error('Redirect result error:', err.message);
+        setError(err.message);
+      }
+    };
+
+    handleRedirectResult();
     setLoading(false);
   }, []);
 
@@ -69,26 +95,38 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       setError(null);
 
-      // Sign in with Google using Firebase
-      const result = await signInWithPopup(auth, googleProvider);
-      const idToken = await result.user.getIdToken();
+      // Detect if it's a mobile device
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-      // Send the ID token to backend for verification
-      const response = await authAPI.googleAuth(idToken);
-      const { token, user: userData } = response.data;
+      let result;
+      
+      if (isMobile) {
+        // Use redirect flow for mobile
+        await signInWithRedirect(auth, googleProvider);
+        // The redirect will navigate away, so we return here
+        return;
+      } else {
+        // Use popup flow for desktop
+        result = await signInWithPopup(auth, googleProvider);
+        const idToken = await result.user.getIdToken();
 
-      // Store in localStorage
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(userData));
+        // Send the ID token to backend for verification
+        const response = await authAPI.googleAuth(idToken);
+        const { token, user: userData } = response.data;
 
-      setUser(userData);
-      return { user: userData, token };
+        // Store in localStorage
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(userData));
+
+        setUser(userData);
+        setLoading(false);
+        return { user: userData, token };
+      }
     } catch (err) {
       const message = err.response?.data?.error || err.message;
       setError(message);
-      throw err;
-    } finally {
       setLoading(false);
+      throw err;
     }
   };
 

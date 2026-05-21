@@ -231,61 +231,64 @@ const ProductsPage = () => {
       <div className="fixed inset-0 z-[-1] bg-white pointer-events-none"></div>
 
       <div className="max-w-7xl mx-auto space-y-8 pb-24 md:pb-8 relative">
-        <div className="pt-2 pb-1 flex items-center justify-between gap-4">
-          <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">Products</h1>
+        <div className="pt-4 pb-2 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="h-8 w-2 bg-gradient-to-b from-blue-400 to-sky-500 rounded-full"></div>
+            <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">Products</h1>
+          </div>
           <button
             type="button"
             onClick={openForm}
-            className={`inline-flex items-center gap-2 rounded-2xl border border-black px-4 py-2.5 text-sm font-bold shadow-sm transition-colors hover:shadow-md ${showForm ? 'bg-black text-white' : 'bg-white text-black'} hover:bg-black hover:text-white active:bg-black active:text-white focus-visible:bg-black focus-visible:text-white`}
+            className={`inline-flex items-center gap-2 rounded-xl border px-5 py-3 text-sm font-bold shadow-sm transition-all duration-300 ${showForm ? 'border-slate-900 bg-slate-900 text-white' : 'border-slate-900 bg-white text-slate-900 hover:bg-slate-900 hover:text-white hover:shadow-md'}`}
           >
-            <Plus className="h-4 w-4" strokeWidth={2.2} />
+            <Plus className="h-5 w-5" strokeWidth={2.2} />
             Add Medicine
           </button>
         </div>
 
         {showForm && (
-          <div className="glass-panel overflow-hidden relative">
+          <div className="glass-panel overflow-hidden relative rounded-2xl">
             <SectionHeader title={isEditing ? 'Edit Medicine' : 'Add Medicine'} />
-            <div className="p-8 md:p-10 relative">
+            <div className="p-8 md:p-12 relative bg-gradient-to-br from-white to-slate-50">
           
-          <div className="grid gap-6 lg:grid-cols-2 ml-2 md:ml-14">
+          <div className="grid gap-8 lg:grid-cols-2">
             <div className="space-y-6">
               <div className="group/input">
-                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-black uppercase mb-2 ml-1"><Pill className="h-3.5 w-3.5" /> Medicine Name <span className="text-rose-500">*</span></label>
+                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-slate-700 uppercase mb-3 ml-1"><Pill className="h-4 w-4 text-blue-600" /> Medicine Name <span className="text-rose-500">*</span></label>
                 <input
                   name="medicineName"
                   value={formData.medicineName}
                   onChange={handleChange}
                   type="text"
                   required
-                  className="glass-input w-full px-5 py-4 text-slate-800 font-bold placeholder:text-slate-400 focus:!border-slate-200 focus:!ring-0"
+                  className="glass-input w-full px-5 py-3.5 text-slate-800 font-semibold placeholder:text-slate-400 border border-slate-200 rounded-xl hover:border-slate-300 focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition duration-300"
                   placeholder="Enter medicine name"
                 />
               </div>
               <div className="group/input">
-                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-black uppercase mb-2 ml-1"><Package className="h-3.5 w-3.5" /> Stock Quantity</label>
+                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-slate-700 uppercase mb-3 ml-1"><Package className="h-4 w-4 text-blue-600" /> Stock Quantity</label>
                 <input
                   name="stock"
                   value={formData.stock}
                   onChange={handleChange}
                   type="number"
-                  className="glass-input w-full px-5 py-4 text-slate-800 font-bold placeholder:text-slate-400 focus:!border-slate-200 focus:!ring-0"
+                  className="glass-input w-full px-5 py-3.5 text-slate-800 font-semibold placeholder:text-slate-400 border border-slate-200 rounded-xl hover:border-slate-300 focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition duration-300"
                   placeholder="0"
                 />
               </div>
               <div className="group/input">
-                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-black uppercase mb-2 ml-1"><TrendingDown className="h-3.5 w-3.5" /> Low Stock Alert Limit</label>
+                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-slate-700 uppercase mb-3 ml-1"><TrendingDown className="h-4 w-4 text-blue-600" /> Low Stock Alert Limit</label>
                 <input
                   name="lowStock"
                   value={formData.lowStock}
                   onChange={handleChange}
                   type="number"
-                  className="glass-input w-full px-5 py-4 text-slate-800 font-bold placeholder:text-slate-400 focus:!border-slate-200 focus:!ring-0"
+                  className="glass-input w-full px-5 py-3.5 text-slate-800 font-semibold placeholder:text-slate-400 border border-slate-200 rounded-xl hover:border-slate-300 focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition duration-300"
                   placeholder="Threshold level"
                 />
               </div>
               <div className="group/input relative">
-                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-black uppercase mb-2 ml-1"><DollarSign className="h-3.5 w-3.5" /> Cost Price <span className="text-rose-500">*</span></label>
+                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-slate-700 uppercase mb-3 ml-1"><DollarSign className="h-4 w-4 text-blue-600" /> Cost Price <span className="text-rose-500">*</span></label>
                 <div className="relative">
                   <span className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₹</span>
                   <input
@@ -294,13 +297,13 @@ const ProductsPage = () => {
                     onChange={handleChange}
                     type="number"
                     required
-                    className="glass-input w-full pl-10 pr-5 py-4 text-slate-800 font-bold placeholder:text-slate-400 focus:!border-slate-200 focus:!ring-0"
+                    className="glass-input w-full pl-10 pr-5 py-3.5 text-slate-800 font-semibold placeholder:text-slate-400 border border-slate-200 rounded-xl hover:border-slate-300 focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition duration-300"
                     placeholder="0.00"
                   />
                 </div>
               </div>
               <div className="group/input relative">
-                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-black uppercase mb-2 ml-1"><Banknote className="h-3.5 w-3.5" /> Retail Selling Price <span className="text-rose-500">*</span></label>
+                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-slate-700 uppercase mb-3 ml-1"><Banknote className="h-4 w-4 text-blue-600" /> Retail Selling Price <span className="text-rose-500">*</span></label>
                 <div className="relative">
                   <span className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₹</span>
                   <input
@@ -309,83 +312,83 @@ const ProductsPage = () => {
                     onChange={handleChange}
                     type="number"
                     required
-                    className="glass-input w-full pl-10 pr-5 py-4 text-slate-800 font-black text-lg placeholder:text-slate-400 focus:!border-slate-200 focus:!ring-0"
+                    className="glass-input w-full pl-10 pr-5 py-3.5 text-slate-800 font-bold text-lg placeholder:text-slate-400 border border-slate-200 rounded-xl hover:border-slate-300 focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition duration-300"
                     placeholder="0.00"
                   />
                 </div>
               </div>
               <div className="group/input">
-                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-black uppercase mb-2 ml-1"><FolderOpen className="h-3.5 w-3.5" /> Class / Category <span className="text-rose-500">*</span></label>
+                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-slate-700 uppercase mb-3 ml-1"><FolderOpen className="h-4 w-4 text-blue-600" /> Class / Category <span className="text-rose-500">*</span></label>
                 <input
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
                   type="text"
                   required
-                  className="glass-input w-full px-5 py-4 text-slate-800 font-bold placeholder:text-slate-400 focus:!border-slate-200 focus:!ring-0"
+                  className="glass-input w-full px-5 py-3.5 text-slate-800 font-semibold placeholder:text-slate-400 border border-slate-200 rounded-xl hover:border-slate-300 focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition duration-300"
                   placeholder="Enter category"
                 />
               </div>
             </div>
             <div className="space-y-6">
               <div className="group/input">
-                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-black uppercase mb-2 ml-1"><CalendarDays className="h-3.5 w-3.5" /> Arrived Date <span className="text-rose-500">*</span></label>
+                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-slate-700 uppercase mb-3 ml-1"><CalendarDays className="h-4 w-4 text-blue-600" /> Arrived Date <span className="text-rose-500">*</span></label>
                 <input
                   name="arrivedDate"
                   value={formData.arrivedDate}
                   onChange={handleChange}
                   type="date"
                   required
-                  className="glass-input w-full px-5 py-4 text-slate-800 font-bold placeholder:text-slate-400 focus:!border-slate-200 focus:!ring-0"
+                  className="glass-input w-full px-5 py-3.5 text-slate-800 font-semibold placeholder:text-slate-400 border border-slate-200 rounded-xl hover:border-slate-300 focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition duration-300"
                 />
               </div>
               <div className="group/input">
-                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-black uppercase mb-2 ml-1"><Hourglass className="h-3.5 w-3.5" /> Expire Date <span className="text-rose-500">*</span></label>
+                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-slate-700 uppercase mb-3 ml-1"><Hourglass className="h-4 w-4 text-blue-600" /> Expire Date <span className="text-rose-500">*</span></label>
                 <input
                   name="expireDate"
                   value={formData.expireDate}
                   onChange={handleChange}
                   type="date"
                   required
-                  className="glass-input w-full px-5 py-4 text-slate-800 font-bold placeholder:text-slate-400 focus:!border-slate-200 focus:!ring-0"
+                  className="glass-input w-full px-5 py-3.5 text-slate-800 font-semibold placeholder:text-slate-400 border border-slate-200 rounded-xl hover:border-slate-300 focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition duration-300"
                 />
               </div>
               <div className="group/input">
-                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-black uppercase mb-2 ml-1"><Upload className="h-3.5 w-3.5" /> Upload Image</label>
+                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-slate-700 uppercase mb-3 ml-1"><Upload className="h-4 w-4 text-blue-600" /> Upload Image</label>
                 <input
                   key={fileInputKey}
                   name="imageFile"
                   onChange={handleChange}
                   type="file"
                   accept="image/*"
-                  className="glass-input w-full px-5 py-3 text-slate-800 font-medium file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:!border-slate-200 focus:!ring-0"
+                  className="glass-input w-full px-5 py-3 text-slate-800 font-medium border border-slate-200 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition duration-300"
                 />
               </div>
               {imagePreview && (
-                <div className="glass-panel p-4 border border-white/60">
-                  <p className="text-xs font-bold tracking-widest text-black uppercase mb-3 ml-1">Image Preview</p>
-                  <img src={imagePreview} alt="Medicine preview" className="h-40 w-full rounded-2xl object-cover shadow-sm" />
+                <div className="glass-panel p-4 border border-slate-200 rounded-xl bg-gradient-to-br from-slate-50 to-slate-100">
+                  <p className="text-xs font-bold tracking-widest text-slate-600 uppercase mb-3 ml-1">Image Preview</p>
+                  <img src={imagePreview} alt="Medicine preview" className="h-40 w-full rounded-xl object-cover shadow-sm border border-slate-200" />
                 </div>
               )}
               <div className="group/input">
-                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-black uppercase mb-2 ml-1"><Tags className="h-3.5 w-3.5" /> Batch Name</label>
+                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-slate-700 uppercase mb-3 ml-1"><Tags className="h-4 w-4 text-blue-600" /> Batch Name</label>
                 <input
                   name="batchName"
                   value={formData.batchName}
                   onChange={handleChange}
                   type="text"
-                  className="glass-input w-full px-5 py-4 text-slate-800 font-bold placeholder:text-slate-400"
+                  className="glass-input w-full px-5 py-3.5 text-slate-800 font-semibold placeholder:text-slate-400 border border-slate-200 rounded-xl hover:border-slate-300 focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition duration-300"
                   placeholder="Batch name"
                 />
               </div>
               <div className="group/input">
-                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-black uppercase mb-2 ml-1"><FileText className="h-3.5 w-3.5" /> Description</label>
+                <label className="inline-flex items-center gap-2 text-xs font-bold tracking-widest text-slate-700 uppercase mb-3 ml-1"><FileText className="h-4 w-4 text-blue-600" /> Description</label>
                 <textarea
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
                   rows="4"
-                  className="glass-input w-full px-5 py-4 text-slate-800 font-medium placeholder:text-slate-400 resize-none focus:!border-slate-200 focus:!ring-0"
+                  className="glass-input w-full px-5 py-3.5 text-slate-800 font-medium placeholder:text-slate-400 border border-slate-200 rounded-xl hover:border-slate-300 focus:border-slate-400 focus:ring-1 focus:ring-slate-200 resize-none transition duration-300"
                   placeholder="Add description"
                 />
               </div>
@@ -397,7 +400,7 @@ const ProductsPage = () => {
                 <button
                   type="button"
                   onClick={closeForm}
-                  className="px-8 py-4 rounded-xl text-slate-500 font-bold hover:bg-slate-50 hover:text-slate-700 transition shadow-sm border border-slate-200"
+                  className="px-8 py-3.5 rounded-xl text-slate-600 font-bold hover:bg-slate-100 hover:text-slate-800 transition duration-300 shadow-sm border border-slate-200"
                 >
                   Cancel
                 </button>
@@ -406,9 +409,9 @@ const ProductsPage = () => {
                 <button
                   type="button"
                   onClick={handleSubmit}
-                  className="w-full sm:w-auto px-6 py-3 text-base font-black tracking-wide flex justify-center items-center gap-2 rounded-xl bg-slate-900 border border-slate-900 text-white transition-all"
+                  className="w-full sm:w-auto px-8 py-3.5 text-base font-bold tracking-wide flex justify-center items-center gap-2 rounded-xl bg-slate-900 border border-slate-900 text-white hover:bg-slate-800 hover:shadow-lg transition-all duration-300"
                 >
-                  <span className="text-lg">{isEditing ? <RotateCcw className="h-4.5 w-4.5" /> : <CheckCircle2 className="h-4.5 w-4.5" />}</span>
+                  <span className="text-lg">{isEditing ? <RotateCcw className="h-5 w-5" /> : <CheckCircle2 className="h-5 w-5" />}</span>
                   <span>{isEditing ? 'Update Medicine' : 'Add Medicine'}</span>
                 </button>
               )}
@@ -417,7 +420,7 @@ const ProductsPage = () => {
           </div>
         )}
 
-        <div className="glass-panel overflow-hidden relative mt-8">
+        <div className="glass-panel overflow-hidden relative mt-8 hidden md:block">
           <SectionHeader title="Medicine Catalog" />
           <div className="overflow-x-auto p-4">
             <table className="min-w-full divide-y divide-slate-200 text-sm">
@@ -498,6 +501,107 @@ const ProductsPage = () => {
               </tbody>
             </table>
           </div>
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="md:hidden space-y-4 mt-8">
+          <div className="p-5 border-b border-blue-100 bg-gradient-to-r from-blue-50 via-white to-sky-50 flex items-center gap-3 rounded-t-2xl">
+            <div className="h-7 w-2 bg-gradient-to-b from-blue-400 to-sky-500 rounded-full"></div>
+            <h3 className="text-xl font-black text-slate-900 tracking-tight">Medicine Catalog</h3>
+          </div>
+          {products.length === 0 ? (
+            <div className="px-6 py-12 text-center text-slate-500 font-semibold">
+              No products found. Add a new medicine above.
+            </div>
+          ) : (
+            <div className="px-4 pb-4 grid grid-cols-1 gap-4">
+                {products.map((medicine, index) => (
+                  <div
+                    key={medicine.id}
+                    className="glass-panel rounded-2xl p-4 border border-slate-200 bg-white hover:border-slate-300 transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
+                  >
+                    {/* Medicine Image */}
+                    <div className="relative h-40 w-full overflow-hidden rounded-xl mb-4 border border-slate-200 bg-gradient-to-br from-slate-100 to-slate-50 shadow-sm">
+                      {medicine.imageUrl ? (
+                        <img
+                          src={medicine.imageUrl}
+                          alt={medicine.medicineName}
+                          className="h-full w-full object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-slate-300">
+                          <Pill className="h-10 w-10" strokeWidth={1.5} />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Medicine Name and Batch */}
+                    <div className="mb-4">
+                      <h4 className="text-lg font-black text-slate-900">{medicine.medicineName}</h4>
+                      <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mt-1.5">
+                        Batch: {medicine.batchName || 'N/A'}
+                      </p>
+                    </div>
+
+                    {/* Details Grid */}
+                    <div className="space-y-2.5 mb-5 bg-gradient-to-br from-slate-50 to-blue-50 p-3 rounded-xl border border-slate-200">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold tracking-widest text-slate-600 uppercase">Cost Price</span>
+                        <span className="text-sm font-bold text-slate-900">₹{medicine.costPrice}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold tracking-widest text-slate-600 uppercase">Retail Price</span>
+                        <span className="text-sm font-bold text-slate-900">₹{medicine.sellingPrice}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold tracking-widest text-slate-600 uppercase">Stock</span>
+                        <span className="text-sm font-semibold text-slate-700">{medicine.stock}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold tracking-widest text-slate-600 uppercase">Low Stock Limit</span>
+                        <span className="text-sm font-semibold text-slate-700">{medicine.lowStock}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold tracking-widest text-slate-600 uppercase">Arrived</span>
+                        <span className="text-sm font-semibold text-slate-700">
+                          {formatDateWithShortMonth(medicine.arrivedDate)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold tracking-widest text-slate-600 uppercase">Expires</span>
+                        <span className="text-sm font-semibold text-slate-700">
+                          {formatDateWithShortMonth(medicine.expireDate)}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Edit/Delete Buttons */}
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handleEdit(index)}
+                        aria-label="Edit medicine"
+                        title="Edit medicine"
+                        className="flex-1 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-bold text-blue-700 shadow-sm hover:bg-blue-100 hover:border-blue-300 transition-all duration-300 flex items-center justify-center gap-2"
+                      >
+                        <PencilLine className="h-4 w-4" />
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteRequest(index)}
+                        aria-label="Delete medicine"
+                        title="Delete medicine"
+                        className="flex-1 rounded-xl bg-white border border-red-200 px-4 py-3 text-sm font-bold text-red-600 hover:bg-red-50 hover:border-red-300 shadow-sm transition-all duration-300 flex items-center justify-center gap-2"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
         </div>
 
       <ConfirmDialog
