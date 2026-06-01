@@ -25,22 +25,27 @@ const MobileBottomNav = () => {
             to={item.to}
             end
             className={({ isActive }) =>
-              `flex flex-col items-center justify-center w-[4.5rem] h-14 rounded-[1.25rem] relative transition-colors duration-200 ${
-                isActive ? 'text-black bg-slate-50 border border-slate-200' : 'text-slate-400 hover:text-black'
+              `flex flex-col items-center justify-center w-[4.5rem] h-14 rounded-[1.25rem] relative transition-all duration-300 ${
+                isActive 
+                  ? 'text-blue-600 bg-blue-50 border border-blue-200 shadow-md' 
+                  : 'text-slate-400 hover:text-slate-600'
               }`
             }
           >
             {({ isActive }) => (
               <>
                 <div className="relative flex items-center justify-center text-xl">
-                  <ItemIcon className="transition-colors duration-200" strokeWidth={1.9} />
+                  <ItemIcon 
+                    className={`transition-colors duration-300 ${isActive ? 'text-blue-600' : 'text-slate-400'}`} 
+                    strokeWidth={1.9} 
+                  />
                   {item.to === '/billing' && cartCount > 0 && (
-                    <span className="absolute -top-1 -right-2 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-black text-[9px] font-bold text-white shadow-xl ring-2 ring-white z-10">
+                    <span className="absolute -top-1 -right-2 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-blue-600 text-[9px] font-bold text-white shadow-xl ring-2 ring-white z-10">
                       {cartCount}
                     </span>
                   )}
                 </div>
-                <span className="mt-1 text-[10px] uppercase tracking-widest font-extrabold transition-colors duration-200">
+                <span className={`mt-1 text-[10px] uppercase tracking-widest font-extrabold transition-colors duration-300 ${isActive ? 'text-blue-600' : 'text-slate-400'}`}>
                   {item.name}
                 </span>
               </>

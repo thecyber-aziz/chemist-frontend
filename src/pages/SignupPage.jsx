@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Mail, Lock, User } from 'lucide-react';
@@ -6,11 +6,31 @@ import { useAuth } from '../context/AuthContext';
 
 const SignupPage = () => {
   const navigate = useNavigate();
-  const { signup, googleSignIn } = useAuth();
+  const { signup, googleSignIn, user, loading } = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  // Auto-redirect if user is already logged in
+  useEffect(() => {
+    if (user) {
+      console.log('[SignupPage] User authenticated, redirecting to home');
+      navigate('/home', { replace: true });
+    }
+  }, [user, navigate]);
+
+  // Show loading spinner if auth is initializing
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white px-4 py-10 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
+          <p className="mt-4 text-gray-500">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -39,7 +59,7 @@ const SignupPage = () => {
       setSubmitting(true);
       await signup({ name, email, password });
       toast.success('Account created successfully');
-      navigate('/home', { replace: true });
+      // useEffect will handle redirect
     } catch (error) {
       toast.error(error.response?.data?.error || 'Signup failed');
     } finally {
@@ -51,19 +71,16 @@ const SignupPage = () => {
     try {
       setSubmitting(true);
       await googleSignIn();
-      // For mobile, this will redirect, so we don't need to navigate
-      // For desktop, after redirect result is handled in AuthContext, user will be set
-      toast.success('Signed up with Google successfully');
-      // Use a small delay to allow mobile redirect to happen
-      setTimeout(() => {
-        navigate('/home', { replace: true });
-      }, 500);
+      // For mobile: page will reload and redirect result will be caught
+      // For desktop: user state will update and useEffect will redirect
+      // useEffect will handle redirect
     } catch (error) {
       setSubmitting(false);
+      
       if (error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
-        // User cancelled the popup, just reset state
-        toast.info('Sign-up cancelled');
+        console.log('[SignupPage] User cancelled sign-up');
       } else {
+        console.error('[SignupPage] Google sign-up error:', error);
         toast.error(error.message || 'Google sign-up failed');
       }
     }
@@ -120,7 +137,7 @@ const SignupPage = () => {
 
             <button
               type="submit"
-              disabled={submitting}
+              disabled={submitting || loading}
               className="h-12 w-full rounded-xl bg-[#8d8d8d] text-[15px] font-medium text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-80"
             >
               {submitting ? 'Creating account...' : 'Create Account'}
@@ -136,7 +153,7 @@ const SignupPage = () => {
           <button
             type="button"
             onClick={handleGoogleSignIn}
-            disabled={submitting}
+            disabled={submitting || loading}
             className="h-12 w-full rounded-xl bg-black text-[15px] font-medium text-white transition hover:bg-gray-900 disabled:cursor-not-allowed disabled:opacity-80 flex items-center justify-center gap-3"
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24">

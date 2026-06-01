@@ -1,10 +1,14 @@
 import React, { useMemo, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useProducts } from '../context/ProductContext';
+import { useAuth } from '../context/AuthContext';
 import { medicineAPI } from '../services/apiCalls';
 import { formatDateWithShortMonth } from '../utils/helpers';
-import { Package, AlertTriangle, Hourglass, TrendingDown, Ban, Search, SearchX, ChevronDown, Pill } from 'lucide-react';
+import { Package, AlertTriangle, Hourglass, TrendingDown, Ban, Search, SearchX, ChevronDown, Pill, LogOut, Eye, EyeOff } from 'lucide-react';
 
 const HomePage = () => {
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const { cartProducts, addToCart } = useProducts();
   const [medicines, setMedicines] = useState([]);
   const [search, setSearch] = useState('');
@@ -110,18 +114,75 @@ const HomePage = () => {
     <div className="w-full">
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="pt-4 pb-2 relative">
-          <div className="flex items-center gap-3 mb-1">
-            <div className="h-8 w-2 bg-gradient-to-b from-blue-400 to-sky-500 rounded-full"></div>
-            <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">Dashboard</h1>
+        {/* Mobile Header - Profile Avatar + Logout */}
+        <div className="md:hidden flex items-center justify-between mb-6 px-4">
+          {/* User Profile Avatar */}
+          <div className="flex items-center gap-3">
+            {user?.photoURL ? (
+              <img
+                src={user.photoURL}
+                alt={user.displayName || 'User'}
+                className="h-12 w-12 rounded-full border-2 border-blue-500 shadow-md object-cover"
+              />
+            ) : (
+              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-blue-400 to-sky-500 flex items-center justify-center border-2 border-white shadow-md">
+                <span className="text-white font-bold text-lg">
+                  {user?.displayName?.charAt(0)?.toUpperCase() || 'U'}
+                </span>
+              </div>
+            )}
+            <div className="flex flex-col">
+              <p className="text-sm font-bold text-slate-900">
+                {user?.displayName || user?.email || 'User'}
+              </p>
+              <p className="text-xs text-slate-500">Welcome back</p>
+            </div>
           </div>
+
+          {/* Logout Button */}
+          <div className="flex items-center gap-2">
+            {/* Eye Icon - Toggle Show/Hide */}
+            <button
+              type="button"
+              onClick={() => setShowCategories((prev) => !prev)}
+              className="flex items-center justify-center h-10 w-10 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 transition-all duration-300"
+              title={showCategories ? 'Hide stats' : 'Show stats'}
+            >
+              {showCategories ? (
+                <Eye className="h-5 w-5 text-blue-600" strokeWidth={2} />
+              ) : (
+                <EyeOff className="h-5 w-5 text-blue-400" strokeWidth={2} />
+              )}
+            </button>
+
+            {/* Logout Icon Button */}
+            <button
+              type="button"
+              onClick={() => {
+                logout();
+                navigate('/login');
+              }}
+              className="flex items-center justify-center h-10 w-10 rounded-lg bg-red-50 hover:bg-red-100 border border-red-200 transition-all duration-300"
+              title="Logout"
+            >
+              <LogOut className="h-5 w-5 text-red-600" strokeWidth={2} />
+            </button>
+          </div>
+        </div>
+
+        {/* Dashboard Heading - Desktop Only */}
+        <div className="hidden md:flex items-center gap-3 mb-1">
+          <div className="h-8 w-2 bg-gradient-to-b from-blue-400 to-sky-500 rounded-full"></div>
+          <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight">Dashboard</h1>
           <button
             type="button"
             onClick={() => setShowCategories((prev) => !prev)}
-            className={`absolute right-0 top-0 inline-flex items-center gap-2 rounded-2xl border px-4 py-2 text-sm font-semibold shadow-sm transition md:hidden ${showCategories ? 'border-black bg-black text-white' : 'border-black bg-white text-black hover:bg-slate-900 hover:text-white'}`}
+            className={`absolute right-0 top-0 inline-flex items-center gap-2 rounded-2xl border px-4 py-2 text-sm font-semibold shadow-sm transition ${showCategories ? 'border-black bg-black text-white' : 'border-black bg-white text-black hover:bg-slate-900 hover:text-white'}`}
           >
             <span>{showCategories ? 'Hide' : 'Show'}</span>
             <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${showCategories ? 'rotate-180' : ''}`} />
           </button>
+        </div>
         </div>
 
         {/* Stats Grid */}
